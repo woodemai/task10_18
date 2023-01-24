@@ -4,7 +4,6 @@ package ru.smirnov.utils;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -38,6 +37,13 @@ public class Utils {
         Path file = Paths.get(filePath);
         Files.write(file, list, StandardCharsets.UTF_8);
     }
+    public static void  writeDoubleMatrixToFile(String file, double[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                
+            }
+        }
+    }
 
     public static String[] readStringArrayFromFile(String path) {
         String[] params;
@@ -53,14 +59,14 @@ public class Utils {
     }
 
 
-    public static List<List<String>> readStringMatrixFromFile(String path) throws FileNotFoundException {
+    public static String[][] readStringMatrixFromFile(String path) throws FileNotFoundException {
         List<List<String>> list = new ArrayList<>();
         Scanner rowScan = new Scanner(new File(path));
         while (rowScan.hasNextLine()) {
             List<String> line = List.of(rowScan.nextLine().split(" "));
             list.add(line);
         }
-        return list;
+        return convertStringMatrixListToArr(list);
     }
 
 
@@ -74,15 +80,17 @@ public class Utils {
         return arr;
     }
 
-    public static void setTable(JTable table, String[] identifiers) {
-        Font font = new Font("Roboto", Font.PLAIN, 14);
+    public static void setTable(JTable table, String[] identifiers, int cellSize) {
+        Font font = new Font("Roboto", Font.PLAIN, 18);
         table.setFont(font);
-        table.setRowHeight(20);
+        table.setRowHeight(cellSize);
         table.createDefaultColumnsFromModel();
         DefaultTableModel model = new DefaultTableModel();
-        model.setColumnCount(4);
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(cellSize/2);
+        }
+        model.setColumnCount(identifiers.length);
         model.setColumnIdentifiers(identifiers);
-        model.setRowCount(1);
         table.setModel(model);
     }
     public static void writeArrayToTable(JTable table, Object[][] arr) {

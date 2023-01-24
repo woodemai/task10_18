@@ -1,5 +1,6 @@
 package ru.smirnov.tasks.task10_18;
 
+import ru.smirnov.utils.ArrayUtils;
 import ru.smirnov.utils.JTableUtils;
 import ru.smirnov.utils.SwingUtils;
 import ru.smirnov.utils.Utils;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Window extends JFrame {
@@ -31,13 +33,16 @@ public class Window extends JFrame {
         setIconImage(logo.getImage());
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        int width = 800;
-        int height = 500;
-        setBounds(dimension.width / 2 - width / 2, dimension.height / 2 - height / 2, width, height);
         Utils.setDefaultFont(mainFont);
 
+        int cellSize = 50;
         String[] identifiers = {"Точка 1 X", "Точка 1 Y", "Точка 2 X", "Точка 2 Y", "Точка 3 X", "Точка 3 Y"};
-        Utils.setTable(table, identifiers);
+        Utils.setTable(table, identifiers, cellSize);
+
+        int width = cellSize * identifiers.length + 100;
+        int height = 600;
+        setBounds(dimension.width / 2 - width / 2, dimension.height / 2 - height / 2, width, height);
+
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("."));
@@ -48,8 +53,7 @@ public class Window extends JFrame {
             try {
                 if (fileChooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
                     String path = fileChooser.getSelectedFile().getPath();
-                    Object[][] arr = Utils.convertStringMatrixListToArr(Utils.readStringMatrixFromFile(path));
-
+                    String[][] arr = Utils.readStringMatrixFromFile(path);
                     Utils.writeArrayToTable(table, arr);
                 }
             } catch (Exception e1) {
@@ -64,7 +68,11 @@ public class Window extends JFrame {
                 if (fileChooser.showSaveDialog(panel) == JFileChooser.APPROVE_OPTION) {
                     String file = fileChooser.getSelectedFile().getPath();
                     PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
-                    writer.println();
+                    double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
+                    assert matrix != null;
+                    for (double[] doubles : matrix) {
+                        Utils.writeLineToFile(file, Arrays.toString(doubles));
+                    }
                     writer.close();
                 }
             } catch (Exception e1) {
@@ -77,12 +85,13 @@ public class Window extends JFrame {
                 double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
                 assert matrix != null;
                 ArrayList<Triangle> triangles = Logic.createTriangles(matrix);
+                int i = 0;
                 triangles.removeIf(triangle -> !triangle.oneQuarter(triangle));
                 matrix = Logic.createMatrix(triangles);
                 Utils.writeArrayToTable(table, matrix);
 
 
-            } catch (Exception e1){
+            } catch (Exception e1) {
                 SwingUtils.showErrorMessageBox(e1);
             }
         });
