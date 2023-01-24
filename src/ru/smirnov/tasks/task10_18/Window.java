@@ -22,7 +22,6 @@ public class Window extends JFrame {
     private JButton buttonInput;
     private JButton buttonOutput;
     private JButton buttonExecute;
-
     Font mainFont = new Font("Roboto", Font.PLAIN, 16);
     ImageIcon logo = new ImageIcon("logo.png");
 
@@ -71,9 +70,7 @@ public class Window extends JFrame {
                         Triangle triangle = triangles[i];
                         writer.println("[" + triangle.getPoint1X() + " " + triangle.getPoint1Y() + " " + triangle.getPoint2X() + " " + triangle.getPoint2Y() + " " + triangle.getPoint3X() + " "  + triangle.getPoint3Y() + " "  +  "] - " + inOneQuarter[i]);
                     }
-
                     writer.close();
-
                 }
             } catch (Exception e1) {
                 SwingUtils.showInfoMessageBox("Вы ввели неверные значения", "Ошибка");
@@ -83,14 +80,13 @@ public class Window extends JFrame {
         buttonExecute.addActionListener(e -> {
             try {
                 triangles = new Triangle[table.getRowCount()];
-                int[][] matrix = JTableUtils.readIntMatrixFromJTable(table);
+                String[][] matrix = JTableUtils.readStringMatrixFromJTable(table);
                 for (int row = 0; row < Objects.requireNonNull(matrix).length; row++) {
-                    int[] arr = new int[matrix[row].length];
+                    String[] arr = new String[matrix[row].length];
                     for (int column = 0; column < matrix[row].length; column++) {
                         arr[column] = matrix[row][column];
-                        triangles[row] = new Triangle( arr[0],  arr[1],  arr[2],  arr[3],  arr[4],  arr[5]);
-
                     }
+                    triangles[row] = new Triangle( Integer.parseInt(arr[0]),  Integer.parseInt(arr[1]),  Integer.parseInt(arr[2]),  Integer.parseInt(arr[3]),  Integer.parseInt(arr[4]),  Integer.parseInt(arr[5]));
                 }
 
                 inOneQuarter = Logic.oneQuarter(triangles);
@@ -102,8 +98,8 @@ public class Window extends JFrame {
                     table.setValueAt(value, i, 6);
                 }
 
-            } catch (Exception e1) {
-                SwingUtils.showInfoMessageBox("Вы ввели неверные значения", "Ошибка");
+            } catch (Exception e1){
+                SwingUtils.showErrorMessageBox(e1);
             }
         });
     }

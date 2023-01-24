@@ -4,6 +4,7 @@ package ru.smirnov.utils;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -83,7 +84,6 @@ public class Utils {
         model.setColumnIdentifiers(identifiers);
         model.setRowCount(1);
         table.setModel(model);
-
     }
 
     public static void writeArrayToTable(JTable table, Object[][] arr) {
@@ -98,7 +98,6 @@ public class Utils {
             tableModel.addRow(objects);
         }
     }
-
 
 
     public static void setDefaultFont(Font font) {
