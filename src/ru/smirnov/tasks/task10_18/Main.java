@@ -74,7 +74,12 @@ public class Main {
 
             PrintStream out = (params.outputFile != null) ? new PrintStream(params.outputFile) : System.out;
             for (int i = 0; i < inOneQuarter.length; i++) {
-                out.printf("[" + triangles[i].getPoint1X() + " " + triangles[i].getPoint1Y() + " " + triangles[i].getPoint2X() + " " + triangles[i].getPoint2Y() + " " + triangles[i].getPoint3X() + " "  + triangles[i].getPoint3Y() + " "  +  "] - " + inOneQuarter[i] +"\n");
+                String value = "Да";
+                if (!inOneQuarter[i]) {
+                    value = "Нет";
+                }
+                out.printf("[%d, %d, %d, %d, %d, %d] - %s\n", triangles[i].getPoint1X(), triangles[i].getPoint1Y(), triangles[i].getPoint2X(), triangles[i].getPoint2Y(), triangles[i].getPoint3X(), triangles[i].getPoint3Y(), value);
+
             }
             out.close();
         }
