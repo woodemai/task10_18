@@ -11,12 +11,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import java.util.ArrayList;
 
 
 public class Window extends JFrame {
-    private Triangle[] triangles;
-    private boolean[] inOneQuarter;
     private JTable table;
     private JPanel panel;
     private JButton buttonInput;
@@ -38,7 +36,7 @@ public class Window extends JFrame {
         setBounds(dimension.width / 2 - width / 2, dimension.height / 2 - height / 2, width, height);
         Utils.setDefaultFont(mainFont);
 
-        String[] identifiers = {"Точка 1 X", "Точка 1 Y", "Точка 2 X", "Точка 2 Y", "Точка 3 X", "Точка 3 Y", "Одна четверть?"};
+        String[] identifiers = {"Точка 1 X", "Точка 1 Y", "Точка 2 X", "Точка 2 Y", "Точка 3 X", "Точка 3 Y"};
         Utils.setTable(table, identifiers);
 
         JFileChooser fileChooser = new JFileChooser();
@@ -66,10 +64,7 @@ public class Window extends JFrame {
                 if (fileChooser.showSaveDialog(panel) == JFileChooser.APPROVE_OPTION) {
                     String file = fileChooser.getSelectedFile().getPath();
                     PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
-                    for (int i = 0; i < inOneQuarter.length; i++) {
-                        Triangle triangle = triangles[i];
-                        writer.println("[" + triangle.getPoint1X() + " " + triangle.getPoint1Y() + " " + triangle.getPoint2X() + " " + triangle.getPoint2Y() + " " + triangle.getPoint3X() + " "  + triangle.getPoint3Y() + " "  +  "] - " + inOneQuarter[i]);
-                    }
+                    writer.println();
                     writer.close();
                 }
             } catch (Exception e1) {
@@ -79,24 +74,13 @@ public class Window extends JFrame {
 
         buttonExecute.addActionListener(e -> {
             try {
-                triangles = new Triangle[table.getRowCount()];
-                String[][] matrix = JTableUtils.readStringMatrixFromJTable(table);
-                for (int row = 0; row < Objects.requireNonNull(matrix).length; row++) {
-                    String[] arr = new String[matrix[row].length];
-                    for (int column = 0; column < matrix[row].length; column++) {
-                        arr[column] = matrix[row][column];
-                    }
-                    triangles[row] = new Triangle( Integer.parseInt(arr[0]),  Integer.parseInt(arr[1]),  Integer.parseInt(arr[2]),  Integer.parseInt(arr[3]),  Integer.parseInt(arr[4]),  Integer.parseInt(arr[5]));
-                }
+                double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
+                assert matrix != null;
+                ArrayList<Triangle> triangles = Logic.createTriangles(matrix);
+                triangles.removeIf(triangle -> !triangle.oneQuarter(triangle));
+                matrix = Logic.createMatrix(triangles);
+                Utils.writeArrayToTable(table, matrix);
 
-                inOneQuarter = Logic.oneQuarter(triangles);
-                for (int i = 0; i < table.getRowCount(); i++) {
-                    String value = "Да";
-                    if (!inOneQuarter[i]) {
-                        value = "Нет";
-                    }
-                    table.setValueAt(value, i, 6);
-                }
 
             } catch (Exception e1){
                 SwingUtils.showErrorMessageBox(e1);

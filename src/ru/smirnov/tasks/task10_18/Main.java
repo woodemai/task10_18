@@ -24,7 +24,7 @@ public class Main {
                 params.help = true;
                 return params;
             }
-            if (args[0].equals("--window")) {
+            if (args[   0].equals("--window")) {
                 params.window = true;
                 return params;
             }
@@ -61,26 +61,15 @@ public class Main {
             if (matrix == null) {
                 System.err.printf("Can't read matrix from \"%s\"%n", params.inputFile);
                 System.exit(2);
-            }
-            Triangle[] triangles = new Triangle[matrix.length];
+            };
             for (int row = 0; row < Objects.requireNonNull(matrix).length; row++) {
                 String[] arr = new String[matrix[row].length];
                 for (int column = 0; column < matrix[row].length; column++) {
                     arr[column] = String.valueOf(matrix[row][column]);
                 }
-                triangles[row] = new Triangle( Integer.parseInt(arr[0]),  Integer.parseInt(arr[1]),  Integer.parseInt(arr[2]),  Integer.parseInt(arr[3]),  Integer.parseInt(arr[4]),  Integer.parseInt(arr[5]));
-            }
-            boolean[] inOneQuarter = Logic.oneQuarter(triangles);
 
+            }
             PrintStream out = (params.outputFile != null) ? new PrintStream(params.outputFile) : System.out;
-            for (int i = 0; i < inOneQuarter.length; i++) {
-                String value = "Да";
-                if (!inOneQuarter[i]) {
-                    value = "Нет";
-                }
-                out.printf("[%d, %d, %d, %d, %d, %d] - %s\n", triangles[i].getPoint1X(), triangles[i].getPoint1Y(), triangles[i].getPoint2X(), triangles[i].getPoint2Y(), triangles[i].getPoint3X(), triangles[i].getPoint3Y(), value);
-
-            }
             out.close();
         }
     }

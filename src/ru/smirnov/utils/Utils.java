@@ -85,7 +85,6 @@ public class Utils {
         model.setRowCount(1);
         table.setModel(model);
     }
-
     public static void writeArrayToTable(JTable table, Object[][] arr) {
         if (!arr.getClass().isArray()) {
             return;
@@ -124,5 +123,20 @@ public class Utils {
         }
         list.add(sb.toString());
         return list;
+    }
+
+    public static void writeArrayToTable(JTable table, double[][] matrix) {
+        if (!matrix.getClass().isArray()) {
+            return;
+        }
+        if (!(table.getModel() instanceof DefaultTableModel tableModel)) {
+            return;
+        }
+        tableModel.setRowCount(matrix.length);
+        for (int i = 0; i < matrix.length - 1; i++) {
+            for (int j = 0; j < 6; j++) {
+                table.setValueAt(matrix[i][j], i, j);
+            }
+        }
     }
 }

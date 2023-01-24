@@ -1,32 +1,28 @@
 package ru.smirnov.tasks.task10_18;
 
 public class Triangle {
-    private final int point1X, point1Y, point2X, point2Y, point3X, point3Y;
-    public int getPoint1X() {
-        return point1X;
-    }
-    public int getPoint1Y() {
-        return point1Y;
-    }
-    public int getPoint2X() {
-        return point2X;
-    }
-    public int getPoint2Y() {
-        return point2Y;
-    }
-    public int getPoint3X() {
-        return point3X;
-    }
-    public int getPoint3Y() {
-        return point3Y;
+    private final Point POINT1;
+    private final Point POINT2;
+    private final Point POINT3;
+
+    public Triangle(Point POINT1, Point POINT2, Point POINT3) {
+        this.POINT1 = POINT1;
+        this.POINT2 = POINT2;
+        this.POINT3 = POINT3;
     }
 
-    public Triangle(int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y) {
-        this.point1X = point1X;
-        this.point1Y = point1Y;
-        this.point2X = point2X;
-        this.point2Y = point2Y;
-        this.point3X = point3X;
-        this.point3Y = point3Y;
+    public Point getPOINT1() {
+        return POINT1;
+    }
+
+    public Point getPOINT2() {
+        return POINT2;
+    }
+
+    public Point getPOINT3() {
+        return POINT3;
+    }
+    public boolean oneQuarter(Triangle triangle) {
+        return triangle.getPOINT1().getQUARTER() == triangle.getPOINT2().getQUARTER() && triangle.getPOINT2().getQUARTER() == triangle.getPOINT3().getQUARTER();
     }
 }
