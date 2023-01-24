@@ -1,4 +1,4 @@
-package ru.savchenko.tasks.task10_18;
+package ru.smirnov.tasks.task10_18;
 
 public class Triangle {
     private final int point1X, point1Y, point2X, point2Y, point3X, point3Y;

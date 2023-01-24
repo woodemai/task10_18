@@ -1,4 +1,4 @@
-package ru.savchenko.utils;
+package ru.smirnov.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

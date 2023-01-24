@@ -1,4 +1,4 @@
-package ru.savchenko.utils;
+package ru.smirnov.utils;
 
 import javax.swing.*;
 import javax.swing.border.Border;

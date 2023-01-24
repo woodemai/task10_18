@@ -1,4 +1,4 @@
-package ru.savchenko.tasks.task10_18;
+package ru.smirnov.tasks.task10_18;
 
 public class Logic {
 

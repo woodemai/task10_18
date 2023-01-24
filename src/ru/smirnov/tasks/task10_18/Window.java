@@ -1,8 +1,8 @@
-package ru.savchenko.tasks.task10_18;
+package ru.smirnov.tasks.task10_18;
 
-import ru.savchenko.utils.JTableUtils;
-import ru.savchenko.utils.SwingUtils;
-import ru.savchenko.utils.Utils;
+import ru.smirnov.utils.JTableUtils;
+import ru.smirnov.utils.SwingUtils;
+import ru.smirnov.utils.Utils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
