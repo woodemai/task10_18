@@ -14,7 +14,8 @@ public class Logic {
         }
         return triangles;
     }
-    public static double[][] createMatrix (ArrayList<Triangle> triangles) {
+
+    public static double[][] createMatrix(ArrayList<Triangle> triangles) {
         double[][] matrix = new double[triangles.size()][6];
         for (int i = 0; i < triangles.size(); i++) {
             matrix[i][0] = triangles.get(i).getPOINT1().getX();
@@ -25,5 +26,16 @@ public class Logic {
             matrix[i][5] = triangles.get(i).getPOINT3().getY();
         }
         return matrix;
+    }
+
+    public static ArrayList<Triangle> filter(ArrayList<Triangle> triangles) {
+        ArrayList<Triangle> filteredTriangles = new ArrayList<>();
+        for (Triangle triangle :
+                triangles) {
+            if (triangle.oneQuarter(triangle)) {
+                filteredTriangles.add(triangle);
+            }
+        }
+        return filteredTriangles;
     }
 }

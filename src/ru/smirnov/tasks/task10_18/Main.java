@@ -1,10 +1,11 @@
 package ru.smirnov.tasks.task10_18;
 
 import ru.smirnov.utils.ArrayUtils;
+import ru.smirnov.utils.Utils;
 
 import javax.swing.*;
 import java.io.PrintStream;
-import java.util.Objects;
+import java.util.ArrayList;
 
 
 public class Main {
@@ -57,19 +58,23 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()  );
             new Window().setVisible(true);
         } else {
-            int[][] matrix = ArrayUtils.readIntArray2FromFile(params.inputFile);
+            double[][] matrix = ArrayUtils.readDoubleArray2FromFile(params.inputFile);
             if (matrix == null) {
                 System.err.printf("Can't read matrix from \"%s\"%n", params.inputFile);
                 System.exit(2);
             };
-            for (int row = 0; row < Objects.requireNonNull(matrix).length; row++) {
-                String[] arr = new String[matrix[row].length];
-                for (int column = 0; column < matrix[row].length; column++) {
-                    arr[column] = String.valueOf(matrix[row][column]);
-                }
+            ArrayList<Triangle> triangles = Logic.createTriangles(matrix);
+            triangles = Logic.filter(triangles);
+            matrix = Logic.createMatrix(triangles);
+            Utils.writeDoubleMatrixToFile(params.outputFile, matrix);
 
-            }
             PrintStream out = (params.outputFile != null) ? new PrintStream(params.outputFile) : System.out;
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[i].length; j++) {
+                    out.printf("%.2f ",matrix[i][j]);
+                }
+                out.print("\n");
+            }
             out.close();
         }
     }

@@ -49,6 +49,19 @@ public class ArrayUtils {
         Integer[] arr = list.toArray(new Integer[0]);
         return ArrayUtils.toPrimitive(arr);
     }
+    public static double[] toDoubleArray(String str) {
+        Scanner scanner = new Scanner(str);
+        scanner.useLocale(Locale.ROOT);
+        scanner.useDelimiter("(\\s|[,;])+");
+        List<Double> list = new ArrayList<>();
+        while (scanner.hasNext()) {
+            list.add(scanner.nextDouble());
+        }
+
+        // из List<Integer> можно получить Integer[]
+        Double[] arr = list.toArray(new Double[0]);
+        return ArrayUtils.toPrimitive(arr);
+    }
 
 
     public static String toString(int[] arr, String itemFormat) {
@@ -98,6 +111,13 @@ public class ArrayUtils {
         int[][] arr2 = new int[lines.length][];
         for (int r = 0; r < lines.length; r++) {
             arr2[r] = toIntArray(lines[r]);
+        }
+        return arr2;
+    }
+    public static double[][] toDoubleArray2(String[] lines) {
+        double[][] arr2 = new double[lines.length][];
+        for (int r = 0; r < lines.length; r++) {
+            arr2[r] = toDoubleArray(lines[r]);
         }
         return arr2;
     }
@@ -168,6 +188,13 @@ public class ArrayUtils {
     public static int[][] readIntArray2FromFile(String fileName) {
         try {
             return toIntArray2(readLinesFromFile(fileName));
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
+    public static double[][] readDoubleArray2FromFile(String fileName) {
+        try {
+            return toDoubleArray2(readLinesFromFile(fileName));
         } catch (FileNotFoundException e) {
             return null;
         }

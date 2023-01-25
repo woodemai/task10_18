@@ -1,6 +1,5 @@
 package ru.smirnov.tasks.task10_18;
 
-import ru.smirnov.utils.ArrayUtils;
 import ru.smirnov.utils.JTableUtils;
 import ru.smirnov.utils.SwingUtils;
 import ru.smirnov.utils.Utils;
@@ -9,6 +8,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -48,51 +49,55 @@ public class Window extends JFrame {
         fileChooser.setCurrentDirectory(new File("."));
         FileFilter filter = new FileNameExtensionFilter("Text files", "txt");
         fileChooser.addChoosableFileFilter(filter);
-
-        buttonInput.addActionListener(e -> {
-            try {
-                if (fileChooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
-                    String path = fileChooser.getSelectedFile().getPath();
-                    String[][] arr = Utils.readStringMatrixFromFile(path);
-                    Utils.writeArrayToTable(table, arr);
+        buttonInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (fileChooser.showOpenDialog(panel) == JFileChooser.APPROVE_OPTION) {
+                        String path = fileChooser.getSelectedFile().getPath();
+                        String[][] arr = Utils.readStringMatrixFromFile(path);
+                        Utils.writeArrayToTable(table, arr);
+                    }
+                } catch (Exception e1) {
+                    SwingUtils.showInfoMessageBox("Неверный файл", "Ошибка");
+                    throw new RuntimeException(e1);
                 }
-            } catch (Exception e1) {
-                SwingUtils.showInfoMessageBox("Неверный файл", "Ошибка");
-                throw new RuntimeException(e1);
             }
         });
-
-
-        buttonOutput.addActionListener(e -> {
-            try {
-                if (fileChooser.showSaveDialog(panel) == JFileChooser.APPROVE_OPTION) {
-                    String file = fileChooser.getSelectedFile().getPath();
-                    PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
+        buttonOutput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (fileChooser.showSaveDialog(panel) == JFileChooser.APPROVE_OPTION) {
+                        String file = fileChooser.getSelectedFile().getPath();
+                        PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
+                        double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
+                        assert matrix != null;
+                        for (double[] doubles : matrix) {
+                            Utils.writeLineToFile(file, Arrays.toString(doubles));
+                        }
+                        writer.close();
+                    }
+                } catch (Exception e1) {
+                    SwingUtils.showInfoMessageBox("Вы ввели неверные значения", "Ошибка");
+                }
+            }
+        });
+        buttonExecute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
                     double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
                     assert matrix != null;
-                    for (double[] doubles : matrix) {
-                        Utils.writeLineToFile(file, Arrays.toString(doubles));
-                    }
-                    writer.close();
+                    ArrayList<Triangle> triangles = Logic.createTriangles(matrix);
+                    triangles = Logic.filter(triangles);
+                    matrix = Logic.createMatrix(triangles);
+                    Utils.writeArrayToTable(table, matrix);
+
+
+                } catch (Exception e1) {
+                    SwingUtils.showErrorMessageBox(e1);
                 }
-            } catch (Exception e1) {
-                SwingUtils.showInfoMessageBox("Вы ввели неверные значения", "Ошибка");
-            }
-        });
-
-        buttonExecute.addActionListener(e -> {
-            try {
-                double[][] matrix = JTableUtils.readDoubleMatrixFromJTable(table);
-                assert matrix != null;
-                ArrayList<Triangle> triangles = Logic.createTriangles(matrix);
-                int i = 0;
-                triangles.removeIf(triangle -> !triangle.oneQuarter(triangle));
-                matrix = Logic.createMatrix(triangles);
-                Utils.writeArrayToTable(table, matrix);
-
-
-            } catch (Exception e1) {
-                SwingUtils.showErrorMessageBox(e1);
             }
         });
     }

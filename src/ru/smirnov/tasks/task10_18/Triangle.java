@@ -22,7 +22,7 @@ public class Triangle {
     public Point getPOINT3() {
         return POINT3;
     }
-    public boolean oneQuarter(Triangle triangle) {
+    public static boolean oneQuarter(Triangle triangle) {
         return triangle.getPOINT1().getQUARTER() == triangle.getPOINT2().getQUARTER() && triangle.getPOINT2().getQUARTER() == triangle.getPOINT3().getQUARTER()  && triangle.getPOINT1().getQUARTER() == triangle.getPOINT3().getQUARTER();
     }
 }
